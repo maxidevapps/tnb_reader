@@ -17,11 +17,12 @@ class PageSpread extends StatelessWidget {
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width >= 700;
 
-    if (!isWide) {
+    // Cover page
+    if (currentPage.pageNumber == 1) {
       return Center(
         child: SizedBox(
-          width: 350,
-          height: 500,
+          width: 360,
+          height: 520,
           child: PageCard(
             pageNumber: currentPage.pageNumber,
           ),
@@ -29,29 +30,45 @@ class PageSpread extends StatelessWidget {
       );
     }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: 320,
-          height: 500,
+    // Phone layout
+    if (!isWide) {
+      return Center(
+        child: SizedBox(
+          width: 360,
+          height: 520,
           child: PageCard(
             pageNumber: currentPage.pageNumber,
           ),
         ),
+      );
+    }
 
-        const SizedBox(width: 2),
+    // Tablet/Desktop layout
+    return Center(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 340,
+            height: 520,
+            child: PageCard(
+              pageNumber: currentPage.pageNumber,
+            ),
+          ),
 
-        SizedBox(
-          width: 340,
-          height: 500,
-          child: nextPage == null
-              ? const SizedBox()
-              : PageCard(
-                  pageNumber: nextPage!.pageNumber,
-                ),
-        ),
-      ],
+          const SizedBox(width: 2),
+
+          SizedBox(
+            width: 340,
+            height: 520,
+            child: nextPage == null
+                ? const SizedBox()
+                : PageCard(
+                    pageNumber: nextPage!.pageNumber,
+                  ),
+          ),
+        ],
+      ),
     );
   }
 }

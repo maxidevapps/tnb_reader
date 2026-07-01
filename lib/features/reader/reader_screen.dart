@@ -43,6 +43,12 @@ class _ReaderScreenState extends State<ReaderScreen> {
   Widget build(BuildContext context) {
     final page = pages[controller.currentPage - 1];
 
+    PageModel? nextPage;
+
+    if (controller.currentPage < pages.length) {
+      nextPage = pages[controller.currentPage];
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('TNB Reader'),
@@ -63,9 +69,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
             Expanded(
               child: PageSpread(
                 currentPage: page,
-                nextPage: controller.currentPage < pages.length
-                    ? pages[controller.currentPage]
-                    : null,
+                nextPage: nextPage,
               ),
             ),
             Padding(
@@ -83,7 +87,9 @@ class _ReaderScreenState extends State<ReaderScreen> {
                   ),
                   const Spacer(),
                   Text(
-                    '${controller.currentPage} / ${pages.length}',
+                    controller.currentPage == 1
+                        ? 'Cover'
+                        : '${controller.currentPage}-${nextPage?.pageNumber ?? controller.currentPage}',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -91,7 +97,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
                   ),
                   const Spacer(),
                   ElevatedButton(
-                    onPressed: controller.currentPage == pages.length
+                    onPressed: controller.currentPage >= pages.length
                         ? null
                         : () => controller.nextPage(pages.length),
                     child: const Text('Next'),
