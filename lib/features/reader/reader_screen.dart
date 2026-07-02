@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'models/page_model.dart';
 import 'services/reader_controller.dart';
 import 'widgets/page_spread.dart';
+import 'widgets/thumbnail_sheet.dart';
 
 class ReaderScreen extends StatefulWidget {
   const ReaderScreen({super.key});
@@ -39,6 +40,20 @@ class _ReaderScreenState extends State<ReaderScreen> {
     setState(() {});
   }
 
+  void _openThumbnailSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => ThumbnailSheet(
+        totalPages: pages.length,
+        currentPage: controller.currentPage,
+        onPageSelected: (page) {
+          controller.jumpToPage(page);
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final page = pages[controller.currentPage - 1];
@@ -53,6 +68,13 @@ class _ReaderScreenState extends State<ReaderScreen> {
       appBar: AppBar(
         title: const Text('TNB Reader'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.grid_view),
+            tooltip: 'Pages',
+            onPressed: _openThumbnailSheet,
+          ),
+        ],
       ),
       body: GestureDetector(
         onHorizontalDragEnd: (details) {
