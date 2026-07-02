@@ -67,9 +67,29 @@ class _ReaderScreenState extends State<ReaderScreen> {
         child: Column(
           children: [
             Expanded(
-              child: PageSpread(
-                currentPage: page,
-                nextPage: nextPage,
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 350),
+                switchInCurve: Curves.easeOut,
+                switchOutCurve: Curves.easeIn,
+                transitionBuilder: (child, animation) {
+                  final slideAnimation = Tween<Offset>(
+                    begin: const Offset(0.25, 0),
+                    end: Offset.zero,
+                  ).animate(animation);
+
+                  return SlideTransition(
+                    position: slideAnimation,
+                    child: FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    ),
+                  );
+                },
+                child: PageSpread(
+                  key: ValueKey(controller.currentPage),
+                  currentPage: page,
+                  nextPage: nextPage,
+                ),
               ),
             ),
             Padding(
